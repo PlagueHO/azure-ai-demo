@@ -28,9 +28,10 @@ param locationCode string = 'cae'
 
 var logAnalyticsWorkspaceName = '${baseResourceName}-${locationCode}-law'
 var applicationInsightsName = '${baseResourceName}-${locationCode}-ai'
+var keyVaultName = '${baseResourceName}-kv'
 var openAiServiceName = '${baseResourceName}-${locationCode}-oai'
 var aiSearchName = '${baseResourceName}-${locationCode}-aisearch'
-var aiServicesName = '${baseResourceName}-cac-aiservices'
+var containerRegistryName = replace('${baseResourceName}${locationCode}cr','-','')
 var storageAccountName = replace('${baseResourceName}${locationCode}data','-','')
 
 var openAiModelDeployments = [
@@ -86,6 +87,17 @@ module monitoring './modules/monitoring.bicep' = {
   }
 }
 
+module keyVault './modules/keyVault.bicep' = {
+  name: 'keyVault'
+  scope: rg
+  params: {
+    location: location
+    keyVaultName: keyVaultName
+    logAnalyticsWorkspaceId: monitoring.outputs.logAnalyticsWorkspaceId
+    logAnalyticsWorkspaceName: logAnalyticsWorkspaceName
+  }
+}
+
 module openAiService './modules/openAiService.bicep' = {
   name: 'openAiService'
   scope: rg
@@ -114,6 +126,17 @@ module aiSearch './modules/aiSearch.bicep' = {
     replicaCount: 1
     partitionCount: 1
     hostingMode: 'default'
+    logAnalyticsWorkspaceId: monitoring.outputs.logAnalyticsWorkspaceId
+    logAnalyticsWorkspaceName: logAnalyticsWorkspaceName
+  }
+}
+
+module containerRegistry './modules/containerRegistry.bicep' = {
+  name: 'containerRegistry'
+  scope: rg
+  params: {
+    location: location
+    containerRegistryName: containerRegistryName
     logAnalyticsWorkspaceId: monitoring.outputs.logAnalyticsWorkspaceId
     logAnalyticsWorkspaceName: logAnalyticsWorkspaceName
   }
