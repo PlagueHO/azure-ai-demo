@@ -30,7 +30,7 @@ var logAnalyticsWorkspaceName = '${baseResourceName}-${locationCode}-law'
 var applicationInsightsName = '${baseResourceName}-${locationCode}-ai'
 var openAiServiceName = '${baseResourceName}-${locationCode}-oai'
 var aiSearchName = '${baseResourceName}-${locationCode}-aisearch'
-var aiServicesName = '${baseResourceName}-${locationCode}-aiservices'
+var aiServicesName = '${baseResourceName}-cac-aiservices'
 var storageAccountName = replace('${baseResourceName}${locationCode}data','-','')
 
 var openAiModelDeployments = [
@@ -126,7 +126,7 @@ module aiServices './modules/aiServices.bicep' = {
     monitoring
   ]
   params: {
-    location: location
+    location: 'CanadaCentral'
     aiServicesName: aiServicesName
   }
 }

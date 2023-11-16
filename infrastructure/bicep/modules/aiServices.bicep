@@ -1,4 +1,4 @@
-param location string = 'CanadaCentral' // Hard coded because Canada East not supported yet
+param location string
 param aiServicesName string
 
 resource openAiService 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
@@ -7,7 +7,7 @@ resource openAiService 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
   sku: {
     name: 'S0'
   }
-  kind: 'CognitiveServices'
+  kind: 'AIServices'
   identity: {
     type: 'SystemAssigned'
   }
