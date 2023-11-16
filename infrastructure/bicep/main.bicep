@@ -119,18 +119,6 @@ module aiSearch './modules/aiSearch.bicep' = {
   }
 }
 
-module aiServices './modules/aiServices.bicep' = {
-  name: 'aiServices'
-  scope: rg
-  dependsOn: [
-    monitoring
-  ]
-  params: {
-    location: 'CanadaCentral'
-    aiServicesName: aiServicesName
-  }
-}
-
 module storageAccount './modules/storageAccount.bicep' = {
   name: 'storageAccount'
   scope: rg
