@@ -1,0 +1,64 @@
+name: deploy-infrastructure
+
+on:
+  workflow_call:
+    inputs:
+      LOCATION:
+        required: true
+        type: string
+      LOCATION_CODE:
+          required: true
+          type: string
+      BASE_RESOURCE_NAME:
+        required: true
+        type: string
+      RESOURCE_GROUP_NAME:
+        required: true
+        type: string
+    secrets:
+      AZURE_TENANT_ID:
+        required: true
+      AZURE_SUBSCRIPTION_ID:
+        required: true
+      AZURE_CLIENT_ID:
+        required: true
+  
+    outputs:
+      openAiServiceEndpoint:
+        description: "The endpoint of the deployed OpenAI service"
+        value: ${{ jobs.deploy.outputs.openAiServiceEndpoint }}
+
+jobs:
+  deploy:
+    name: Deploy Infrastructure
+    runs-on: ubuntu-latest
+    outputs:
+      openAiServiceEndpoint: ${{ steps.deploy.outputs.openAiServiceEndpoint }}
+
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+
+      - name: Deploy Azure resources
+        id: deploy
+        uses: azure/arm-deploy@v1
+        with:
+          failOnStdErr: false
+          deploymentName: '${{ github.action_ref }}-${{ github.run_number }}'
+          resourceGroupName: ${{ inputs.RESOURCE_GROUP_NAME }}
+          subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          template: ./armtemplate/main.json
+          region: ${{ inputs.LOCATION }}
+          scope: subscription
+          parameters: >
+            location=${{ inputs.LOCATION }}
+            location=${{ inputs.LOCATION_CODE }}
+            baseResourceName=${{ inputs.BASE_RESOURCE_NAME }}
+            resourceGroupName=${{ inputs.RESOURCE_GROUP_NAME }}

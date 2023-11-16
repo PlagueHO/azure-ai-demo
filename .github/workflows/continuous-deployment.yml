@@ -1,0 +1,47 @@
+name: continuous-deployment
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+  checks: write
+  pull-requests: write
+
+jobs:
+  # We are building an ARM template rather than submitting the Bicep directly
+  # because this allows us to use the latest version of the Bicep compiler.
+
+  build-armtemplate:
+    uses: ./.github/workflows/build-armtemplate.yml
+
+  validate-infrastructure:
+    needs:
+      - build-armtemplate
+    uses: ./.github/workflows/validate-infrastructure.yml
+    with:
+      LOCATION: ${{ vars.LOCATION }}
+      LOCATION_CODE: ${{ vars.LOCATION_CODE }}
+      BASE_RESOURCE_NAME: ${{ vars.BASE_RESOURCE_NAME }}
+      RESOURCE_GROUP_NAME: ${{ vars.RESOURCE_GROUP_NAME }}
+    secrets:
+      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+  
+  deploy-infrastructure:
+    needs:
+      - validate-infrastructure
+    uses: ./.github/workflows/deploy-infrastructure.yml
+    with:
+      LOCATION: ${{ vars.LOCATION }}
+      LOCATION_CODE: ${{ vars.LOCATION_CODE }}
+      BASE_RESOURCE_NAME: ${{ vars.BASE_RESOURCE_NAME }}
+    secrets:
+      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
