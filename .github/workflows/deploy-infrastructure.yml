@@ -59,6 +59,6 @@ jobs:
           scope: subscription
           parameters: >
             location=${{ inputs.LOCATION }}
-            location=${{ inputs.LOCATION_CODE }}
+            locationCode=${{ inputs.LOCATION_CODE }}
             baseResourceName=${{ inputs.BASE_RESOURCE_NAME }}
             resourceGroupName=${{ inputs.RESOURCE_GROUP_NAME }}
