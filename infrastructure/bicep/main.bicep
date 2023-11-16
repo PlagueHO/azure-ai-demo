@@ -29,7 +29,8 @@ param locationCode string = 'cae'
 var logAnalyticsWorkspaceName = '${baseResourceName}-${locationCode}-law'
 var applicationInsightsName = '${baseResourceName}-${locationCode}-ai'
 var openAiServiceName = '${baseResourceName}-${locationCode}-oai'
-var aiSearchName = '${baseResourceName}-${locationCode}-ais'
+var aiSearchName = '${baseResourceName}-${locationCode}-aisearch'
+var aiServicesName = '${baseResourceName}-${locationCode}-aiservices'
 var storageAccountName = replace('${baseResourceName}${locationCode}data','-','')
 
 var openAiModelDeployments = [
@@ -115,6 +116,18 @@ module aiSearch './modules/aiSearch.bicep' = {
     hostingMode: 'default'
     logAnalyticsWorkspaceId: monitoring.outputs.logAnalyticsWorkspaceId
     logAnalyticsWorkspaceName: logAnalyticsWorkspaceName
+  }
+}
+
+module aiServices './modules/aiServices.bicep' = {
+  name: 'aiServices'
+  scope: rg
+  dependsOn: [
+    monitoring
+  ]
+  params: {
+    location: location
+    aiServicesName: aiServicesName
   }
 }
 
