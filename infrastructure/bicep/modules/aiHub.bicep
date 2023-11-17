@@ -10,7 +10,7 @@ param applicationInsightsId string
 param containerRegistryId string
 param openAiServiceName string
 param aiContentSafetyName string
-param aiSearchName string
+param aiSpeechName string
 param logAnalyticsWorkspaceId string
 param logAnalyticsWorkspaceName string
 
@@ -22,13 +22,9 @@ resource aiContentSafety 'Microsoft.CognitiveServices/accounts@2023-05-01' exist
   name: aiContentSafetyName
 }
 
-resource aiSearch 'Microsoft.Search/searchServices@2022-09-01' existing = {
-  name: aiSearchName
+resource aiSpeech 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
+  name: aiSpeechName
 }
-
-var openAiServicesTarget = 'https://${openAiService.location}.api.cognitive.microsoft.com'
-var aiContentSafetyTarget = 'https://${aiContentSafety.location}.api.cognitive.microsoft.com'
-var aiSearchTarget = 'https://${aiSearch.location}.api.cognitive.microsoft.com'
 
 resource aiHub 'Microsoft.MachineLearningServices/workspaces@2023-08-01-preview' = {
   name: aiHubName
@@ -48,53 +44,94 @@ resource aiHub 'Microsoft.MachineLearningServices/workspaces@2023-08-01-preview'
     keyVault: keyVaultId
     applicationInsights: applicationInsightsId
     containerRegistry: containerRegistryId
+    systemDatastoresAuthMode: 'accessKey'
     workspaceHubConfig: {
       defaultWorkspaceResourceGroup: resourceGroup().id
     }
   }
 }
 
-resource aiHubConnectionOpenAi 'Microsoft.MachineLearningServices/workspaces/connections@2023-08-01-preview' = {
-  name: 'Default_AzureOpenAI'
+// TODO: Once APIs are published, should be able to remove this
+#disable-next-line BCP081
+resource aiHubOpenAiEndpoint 'Microsoft.MachineLearningServices/workspaces/endpoints@2023-08-01-preview' = {
+  name: 'Azure.OpenAI'
   parent: aiHub
   properties: {
-    authType: 'ApiKey'
-    category: 'AzureOpenAI'
-    target: openAiServicesTarget
-    credentials: {
-      key: openAiService.listKeys().key1
-    }
-    isSharedToAll: true
+    name: 'Azure.OpenAI'
+    endpointType: 'Azure.OpenAI'
+    associatedResourceId: openAiService.id
   }
 }
 
-resource aiHubConnectionContentSafety 'Microsoft.MachineLearningServices/workspaces/connections@2023-08-01-preview' = {
-  name: 'Default_AzureAIContentSafety'
+// TODO: Once APIs are published, should be able to remove this
+#disable-next-line BCP081
+resource aiHubContentSafetyEndpoint 'Microsoft.MachineLearningServices/workspaces/endpoints@2023-08-01-preview' = {
+  name: 'Azure.ContentSafety'
   parent: aiHub
   properties: {
-    authType: 'ApiKey'
-    category: 'CognitiveService'
-    target: aiContentSafetyTarget
-    credentials: {
-      key: aiContentSafety.listKeys().key1
-    }
-    isSharedToAll: true
+    name: 'Azure.ContentSafety'
+    endpointType: 'Azure.ContentSafety'
+    associatedResourceId: aiContentSafety.id
   }
 }
 
-resource aiHubConnectionAiSearch 'Microsoft.MachineLearningServices/workspaces/connections@2023-08-01-preview' = {
-  name: 'Default_AzureAISearch'
+// TODO: Once APIs are published, should be able to remove this
+#disable-next-line BCP081
+resource aiHubSpeechEndpoint 'Microsoft.MachineLearningServices/workspaces/endpoints@2023-08-01-preview' = {
+  name: 'Azure.Speech'
   parent: aiHub
   properties: {
-    authType: 'ApiKey'
-    category: 'CognitiveSearch'
-    target: aiSearchTarget
-    credentials: {
-      key: openAiService.listKeys().key1
-    }
-    isSharedToAll: true
+    name: 'Azure.Speech'
+    endpointType: 'Azure.Speech'
+    associatedResourceId: aiSpeech.id
   }
 }
+
+// var openAiServicesTarget = 'https://${openAiService.location}.api.cognitive.microsoft.com'
+// var aiContentSafetyTarget = 'https://${aiContentSafety.location}.api.cognitive.microsoft.com'
+// var aiSearchTarget = 'https://${aiSearch.location}.api.cognitive.microsoft.com'
+
+// resource aiHubConnectionOpenAi 'Microsoft.MachineLearningServices/workspaces/connections@2023-08-01-preview' = {
+//   name: 'Default_AzureOpenAI'
+//   parent: aiHub
+//   properties: {
+//     authType: 'ApiKey'
+//     category: 'AzureOpenAI'
+//     target: openAiServicesTarget
+//     credentials: {
+//       key: openAiService.listKeys().key1
+//     }
+//     isSharedToAll: true
+//   }
+// }
+
+// resource aiHubConnectionContentSafety 'Microsoft.MachineLearningServices/workspaces/connections@2023-08-01-preview' = {
+//   name: 'Default_AzureAIContentSafety'
+//   parent: aiHub
+//   properties: {
+//     authType: 'ApiKey'
+//     category: 'CognitiveService'
+//     target: aiContentSafetyTarget
+//     credentials: {
+//       key: aiContentSafety.listKeys().key1
+//     }
+//     isSharedToAll: true
+//   }
+// }
+
+// resource aiHubConnectionAiSearch 'Microsoft.MachineLearningServices/workspaces/connections@2023-08-01-preview' = {
+//   name: 'Default_AzureAISearch'
+//   parent: aiHub
+//   properties: {
+//     authType: 'ApiKey'
+//     category: 'CognitiveSearch'
+//     target: aiSearchTarget
+//     credentials: {
+//       key: openAiService.listKeys().key1
+//     }
+//     isSharedToAll: true
+//   }
+// }
 
 // Add the diagnostic settings to send logs and metrics to Log Analytics
 resource aiHubDiagnosticSetting 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {

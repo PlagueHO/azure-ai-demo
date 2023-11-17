@@ -30,6 +30,7 @@ var logAnalyticsWorkspaceName = '${baseResourceName}-${locationCode}-loganalytic
 var applicationInsightsName = '${baseResourceName}-${locationCode}-appinsights'
 var keyVaultName = '${baseResourceName}-keyvault'
 var openAiServiceName = '${baseResourceName}-${locationCode}-openai'
+var aiSpeechName = '${baseResourceName}-${locationCode}-aispeech'
 var aiContentSafetyName = '${baseResourceName}-${locationCode}-aicontentsafety'
 var aiServicesName = '${baseResourceName}-cac-aiservices'
 var aiServicesLocation = 'Canada Central' // AI services is not supported in default Canada East region
@@ -117,6 +118,20 @@ module openAiService './modules/openAiService.bicep' = {
   }
 }
 
+module aiSpeech './modules/aiSpeech.bicep' = {
+  name: 'aiSpeech'
+  scope: rg
+  dependsOn: [
+    monitoring
+  ]
+  params: {
+    location: location
+    aiSpeechName: aiSpeechName
+    logAnalyticsWorkspaceId: monitoring.outputs.logAnalyticsWorkspaceId
+    logAnalyticsWorkspaceName: logAnalyticsWorkspaceName
+  }
+}
+
 module aiSearch './modules/aiSearch.bicep' = {
   name: 'aiSearch'
   scope: rg
@@ -199,8 +214,8 @@ module aiHub './modules/aiHub.bicep' = {
     applicationInsightsId: monitoring.outputs.applicationInsightsId
     containerRegistryId: containerRegistry.outputs.containerRegistryId
     openAiServiceName: openAiService.outputs.openAiServiceName
+    aiSpeechName: aiSpeech.outputs.aiSpeechName
     aiContentSafetyName: aiContentSafety.outputs.aiContentSafetyName
-    aiSearchName: aiSearch.outputs.aiSearchName
     logAnalyticsWorkspaceId: monitoring.outputs.logAnalyticsWorkspaceId
     logAnalyticsWorkspaceName: logAnalyticsWorkspaceName
   }
