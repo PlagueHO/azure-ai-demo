@@ -8,6 +8,8 @@ param storageAccountId string
 param keyVaultId string
 param applicationInsightsId string
 param containerRegistryId string
+param openAiTarget string = 'https://canadacentral.api.cognitive.microsoft.com/'
+param contentSafetyTarget string = 'https://canadaeast.api.cognitive.microsoft.com/'
 param logAnalyticsWorkspaceId string
 param logAnalyticsWorkspaceName string
 
@@ -32,6 +34,28 @@ resource aiHub 'Microsoft.MachineLearningServices/workspaces@2023-08-01-preview'
     workspaceHubConfig: {
       defaultWorkspaceResourceGroup: resourceGroup().id
     }
+  }
+}
+
+resource aiHubConnectionOpenAi 'Microsoft.MachineLearningServices/workspaces/connections@2023-08-01-preview' = {
+  name: 'Default_AzureOpenAI'
+  parent: aiHub
+  properties: {
+    authType: 'ApiKey'
+    category: 'AzureOpenAI'
+    target: openAiTarget
+    isSharedToAll: true
+  }
+}
+
+resource aiHubConnectionContentSafety 'Microsoft.MachineLearningServices/workspaces/connections@2023-08-01-preview' = {
+  name: 'Default_AzureAIContentSafety'
+  parent: aiHub
+  properties: {
+    authType: 'ApiKey'
+    category: 'CognitiveService'
+    target: contentSafetyTarget
+    isSharedToAll: true
   }
 }
 
