@@ -65,4 +65,4 @@ resource openAiServiceDiagnosticSetting 'Microsoft.Insights/diagnosticSettings@2
   }
 }
 
-output aiServicesName string = aiServices.name
+output aiContentSafetyName string = aiContentSafety.name
