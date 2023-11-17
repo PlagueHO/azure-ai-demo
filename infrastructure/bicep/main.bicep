@@ -26,10 +26,11 @@ param baseResourceName string
 @description('The base code that will postfixed to all Azure resources deployed to ensure they are unique.')
 param locationCode string = 'cae'
 
-var logAnalyticsWorkspaceName = '${baseResourceName}-${locationCode}-law'
-var applicationInsightsName = '${baseResourceName}-${locationCode}-ai'
-var keyVaultName = '${baseResourceName}-kv'
-var openAiServiceName = '${baseResourceName}-${locationCode}-oai'
+var logAnalyticsWorkspaceName = '${baseResourceName}-${locationCode}-loganalyticsworkspace'
+var applicationInsightsName = '${baseResourceName}-${locationCode}-appinsights'
+var keyVaultName = '${baseResourceName}-keyvault'
+var openAiServiceName = '${baseResourceName}-${locationCode}-openai'
+var aiServicesName = '${baseResourceName}-cac-aiservices'
 var aiSearchName = '${baseResourceName}-${locationCode}-aisearch'
 var containerRegistryName = replace('${baseResourceName}${locationCode}cr','-','')
 var storageAccountName = replace('${baseResourceName}${locationCode}data','-','')
@@ -126,6 +127,20 @@ module aiSearch './modules/aiSearch.bicep' = {
     replicaCount: 1
     partitionCount: 1
     hostingMode: 'default'
+    logAnalyticsWorkspaceId: monitoring.outputs.logAnalyticsWorkspaceId
+    logAnalyticsWorkspaceName: logAnalyticsWorkspaceName
+  }
+}
+
+module aiServices './modules/aiServices.bicep' = {
+  name: 'aiServices'
+  scope: rg
+  dependsOn: [
+    monitoring
+  ]
+  params: {
+    location: 'CanadaCentral'
+    aiServicesName: aiServicesName
     logAnalyticsWorkspaceId: monitoring.outputs.logAnalyticsWorkspaceId
     logAnalyticsWorkspaceName: logAnalyticsWorkspaceName
   }
