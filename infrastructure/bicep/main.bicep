@@ -35,6 +35,7 @@ var aiServicesName = '${baseResourceName}-cac-aiservices'
 var aiSearchName = '${baseResourceName}-${locationCode}-aisearch'
 var containerRegistryName = replace('${baseResourceName}${locationCode}cr','-','')
 var storageAccountName = replace('${baseResourceName}${locationCode}data','-','')
+var aiHubName = '${baseResourceName}-${locationCode}-aihub'
 
 var openAiModelDeployments = [
   {
@@ -179,6 +180,25 @@ module storageAccount './modules/storageAccount.bicep' = {
   params: {
     location: location
     storageAccountName: storageAccountName
+  }
+}
+
+module aiHub './modules/aiHub.bicep' = {
+  name: 'aiHub'
+  scope: rg
+  dependsOn: [
+    monitoring    
+  ]
+  params: {
+    location: location
+    aiHubName: aiHubName
+    sku: 'Basic'
+    storageAccountId: resourceId('Microsoft.Storage/storageAccounts', storageAccountName)
+    keyVaultId: resourceId('Microsoft.KeyVault/vaults', keyVaultName)
+    applicationInsightsId: resourceId('Microsoft.Insights/components', applicationInsightsName)
+    containerRegistryId: resourceId('Microsoft.ContainerRegistry/registries', containerRegistryName)
+    logAnalyticsWorkspaceId: monitoring.outputs.logAnalyticsWorkspaceId
+    logAnalyticsWorkspaceName: logAnalyticsWorkspaceName
   }
 }
 
