@@ -41,32 +41,7 @@ resource aiHubDiagnosticSetting 'Microsoft.Insights/diagnosticSettings@2021-05-0
   scope: aiHub
   properties: {
     workspaceId: logAnalyticsWorkspaceId
-    logs: [
-      {
-        category: 'Audit'
-        enabled: true
-        retentionPolicy: {
-          days: 0
-          enabled: false 
-        }
-      }
-      {
-        category: 'RequestResponse'
-        enabled: true
-        retentionPolicy: {
-          days: 0
-          enabled: false 
-        }
-      }
-      {
-        category: 'Trace'
-        enabled: true
-        retentionPolicy: {
-          days: 0
-          enabled: false 
-        }
-      }
-    ]
+    logs: []
     metrics:[
       {
         category: 'AllMetrics'
@@ -80,4 +55,5 @@ resource aiHubDiagnosticSetting 'Microsoft.Insights/diagnosticSettings@2021-05-0
   }
 }
 
+output aiHubId string = aiHub.id
 output aiHubName string = aiHub.name
