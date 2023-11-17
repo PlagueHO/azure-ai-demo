@@ -68,4 +68,5 @@ resource aiContentSafetyDiagnosticSetting 'Microsoft.Insights/diagnosticSettings
   }
 }
 
+output aiContentSafetyId string = aiContentSafety.id
 output aiContentSafetyName string = aiContentSafety.name

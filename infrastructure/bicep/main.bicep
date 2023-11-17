@@ -32,6 +32,7 @@ var keyVaultName = '${baseResourceName}-keyvault'
 var openAiServiceName = '${baseResourceName}-${locationCode}-openai'
 var aiContentSafetyName = '${baseResourceName}-${locationCode}-aicontentsafety'
 var aiServicesName = '${baseResourceName}-cac-aiservices'
+var aiServicesLocation = 'Canada Central' // AI services is not supported in default Canada East region
 var aiSearchName = '${baseResourceName}-${locationCode}-aisearch'
 var containerRegistryName = replace('${baseResourceName}${locationCode}cr','-','')
 var storageAccountName = replace('${baseResourceName}${locationCode}data','-','')
@@ -156,7 +157,7 @@ module aiServices './modules/aiServices.bicep' = {
     monitoring
   ]
   params: {
-    location: 'CanadaCentral'
+    location: aiServicesLocation // TODO: Update to location when available in Canada East
     aiServicesName: aiServicesName
     logAnalyticsWorkspaceId: monitoring.outputs.logAnalyticsWorkspaceId
     logAnalyticsWorkspaceName: logAnalyticsWorkspaceName
@@ -197,6 +198,9 @@ module aiHub './modules/aiHub.bicep' = {
     keyVaultId: keyVault.outputs.keyVaultId
     applicationInsightsId: monitoring.outputs.applicationInsightsId
     containerRegistryId: containerRegistry.outputs.containerRegistryId
+    openAiServiceName: openAiService.outputs.openAiServiceName
+    aiContentSafetyName: aiContentSafety.outputs.aiContentSafetyName
+    aiSearchName: aiSearch.outputs.aiSearchName
     logAnalyticsWorkspaceId: monitoring.outputs.logAnalyticsWorkspaceId
     logAnalyticsWorkspaceName: logAnalyticsWorkspaceName
   }
