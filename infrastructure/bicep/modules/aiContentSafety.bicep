@@ -18,10 +18,13 @@ resource aiContentSafety 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
   identity: {
     type: 'SystemAssigned'
   }
+  properties: {
+    publicNetworkAccess: 'Enabled'
+  }
 }
 
 // Add the diagnostic settings to send logs and metrics to Log Analytics
-resource openAiServiceDiagnosticSetting 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+resource aiContentSafetyDiagnosticSetting 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
   name: 'send-to-${logAnalyticsWorkspaceName}'
   scope: aiContentSafety
   properties: {

@@ -39,7 +39,7 @@ param hostingMode string = 'default'
 param logAnalyticsWorkspaceId string
 param logAnalyticsWorkspaceName string
 
-resource cognitiveSearch 'Microsoft.Search/searchServices@2022-09-01' = {
+resource aiSearch 'Microsoft.Search/searchServices@2022-09-01' = {
   name: aiSearchName
   location: location
   sku: {
@@ -53,9 +53,9 @@ resource cognitiveSearch 'Microsoft.Search/searchServices@2022-09-01' = {
 }
 
 // Add the diagnostic settings to send logs and metrics to Log Analytics
-resource cognitiveSearchDiagnosticSetting 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+resource aiSearchDiagnosticSetting 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
   name: 'send-to-${logAnalyticsWorkspaceName}'
-  scope: cognitiveSearch
+  scope: aiSearch
   properties: {
     workspaceId: logAnalyticsWorkspaceId
     logs: [
