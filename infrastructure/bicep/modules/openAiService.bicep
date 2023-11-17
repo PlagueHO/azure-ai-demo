@@ -1,6 +1,10 @@
 param location string
 param openAiServiceName string
 param openAiModeldeployments array
+@allowed([
+  'S0'
+])
+param sku string = 'S0'
 param logAnalyticsWorkspaceId string
 param logAnalyticsWorkspaceName string
 
@@ -8,7 +12,7 @@ resource openAiService 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
   name: openAiServiceName
   location: location
   sku: {
-    name: 'S0'
+    name: sku
   }
   kind: 'OpenAI'
   identity: {

@@ -30,6 +30,7 @@ var logAnalyticsWorkspaceName = '${baseResourceName}-${locationCode}-loganalytic
 var applicationInsightsName = '${baseResourceName}-${locationCode}-appinsights'
 var keyVaultName = '${baseResourceName}-keyvault'
 var openAiServiceName = '${baseResourceName}-${locationCode}-openai'
+var aiContentSafetyName = '${baseResourceName}-${locationCode}-aicontentsafety'
 var aiServicesName = '${baseResourceName}-cac-aiservices'
 var aiSearchName = '${baseResourceName}-${locationCode}-aisearch'
 var containerRegistryName = replace('${baseResourceName}${locationCode}cr','-','')
@@ -127,6 +128,21 @@ module aiSearch './modules/aiSearch.bicep' = {
     replicaCount: 1
     partitionCount: 1
     hostingMode: 'default'
+    logAnalyticsWorkspaceId: monitoring.outputs.logAnalyticsWorkspaceId
+    logAnalyticsWorkspaceName: logAnalyticsWorkspaceName
+  }
+}
+
+module aiContentSafety './modules/aiContentSafety.bicep' = {
+  name: 'aiContentSafety'
+  scope: rg
+  dependsOn: [
+    monitoring
+  ]
+  params: {
+    location: location
+    aiContentSafetyName: aiContentSafetyName
+    sku: 'F0'
     logAnalyticsWorkspaceId: monitoring.outputs.logAnalyticsWorkspaceId
     logAnalyticsWorkspaceName: logAnalyticsWorkspaceName
   }

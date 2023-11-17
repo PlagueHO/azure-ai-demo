@@ -1,20 +1,20 @@
 param location string
-param aiServicesName string
+param aiContentSafetyName string
+param logAnalyticsWorkspaceId string
+param logAnalyticsWorkspaceName string
 @allowed([
   'F0'
   'S0'
 ])
-param sku string = 'S0'
-param logAnalyticsWorkspaceId string
-param logAnalyticsWorkspaceName string
+param sku string = 'F0'
 
-resource aiServices 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
-  name: aiServicesName
+resource aiContentSafety 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
+  name: aiContentSafetyName
   location: location
   sku: {
     name: sku
   }
-  kind: 'AIServices'
+  kind: 'ContentSafety'
   identity: {
     type: 'SystemAssigned'
   }
@@ -23,7 +23,7 @@ resource aiServices 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
 // Add the diagnostic settings to send logs and metrics to Log Analytics
 resource openAiServiceDiagnosticSetting 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
   name: 'send-to-${logAnalyticsWorkspaceName}'
-  scope: aiServices
+  scope: aiContentSafety
   properties: {
     workspaceId: logAnalyticsWorkspaceId
     logs: [
