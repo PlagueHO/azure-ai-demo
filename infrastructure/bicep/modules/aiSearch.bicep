@@ -80,3 +80,6 @@ resource aiSearchDiagnosticSetting 'Microsoft.Insights/diagnosticSettings@2021-0
     ]
   }
 }
+
+output aiSearchId string = aiSearch.id
+output aiSearchName string = aiSearch.name

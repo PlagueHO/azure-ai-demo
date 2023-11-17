@@ -10,4 +10,5 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2022-09-01' = {
   }
 }
 
+output storageAccountId string = storageAccount.id
 output storageAccountEndpoint string = storageAccount.properties.primaryEndpoints.blob

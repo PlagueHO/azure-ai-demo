@@ -54,3 +54,6 @@ resource containerRegistrySetting 'Microsoft.Insights/diagnosticSettings@2021-05
     ]
   }
 }
+
+output containerRegistryId string = containerRegistry.id
+output containerRegistryName string = containerRegistry.name

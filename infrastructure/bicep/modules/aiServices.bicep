@@ -68,4 +68,5 @@ resource aiServicesDiagnosticSetting 'Microsoft.Insights/diagnosticSettings@2021
   }
 }
 
+output aiServicesId string = aiServices.id
 output aiServicesName string = aiServices.name

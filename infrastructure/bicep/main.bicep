@@ -193,10 +193,10 @@ module aiHub './modules/aiHub.bicep' = {
     location: location
     aiHubName: aiHubName
     sku: 'Basic'
-    storageAccountId: resourceId('Microsoft.Storage/storageAccounts', storageAccountName)
-    keyVaultId: resourceId('Microsoft.KeyVault/vaults', keyVaultName)
-    applicationInsightsId: resourceId('Microsoft.Insights/components', applicationInsightsName)
-    containerRegistryId: resourceId('Microsoft.ContainerRegistry/registries', containerRegistryName)
+    storageAccountId: storageAccount.outputs.storageAccountId
+    keyVaultId: keyVault.outputs.keyVaultId
+    applicationInsightsId: monitoring.outputs.applicationInsightsId
+    containerRegistryId: containerRegistry.outputs.containerRegistryId
     logAnalyticsWorkspaceId: monitoring.outputs.logAnalyticsWorkspaceId
     logAnalyticsWorkspaceName: logAnalyticsWorkspaceName
   }
