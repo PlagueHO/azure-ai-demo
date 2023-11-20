@@ -34,6 +34,7 @@ var aiSpeechName = '${baseResourceName}-${locationCode}-aispeech'
 var aiContentSafetyName = '${baseResourceName}-${locationCode}-aicontentsafety'
 var aiServicesName = '${baseResourceName}-cac-aiservices'
 var aiServicesLocation = 'Canada Central' // AI services is not supported in default Canada East region
+var aiSpeechServicesLocation = 'Canada Central' // AI speech services is not supported in default Canada East region
 var aiSearchName = '${baseResourceName}-${locationCode}-aisearch'
 var containerRegistryName = replace('${baseResourceName}${locationCode}cr','-','')
 var storageAccountName = replace('${baseResourceName}${locationCode}data','-','')
@@ -125,7 +126,7 @@ module aiSpeech './modules/aiSpeech.bicep' = {
     monitoring
   ]
   params: {
-    location: location
+    location: aiSpeechServicesLocation
     aiSpeechName: aiSpeechName
     logAnalyticsWorkspaceId: monitoring.outputs.logAnalyticsWorkspaceId
     logAnalyticsWorkspaceName: logAnalyticsWorkspaceName
