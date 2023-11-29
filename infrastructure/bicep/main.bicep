@@ -51,7 +51,7 @@ var openAiModelDeployments = [
   {
     name: 'gpt-35-turbo-1106'
     modelName: 'gpt-35-turbo'
-    version: '1106-Preview'
+    version: '1106'
     sku: 'Standard'
     capacity: 60
   }
