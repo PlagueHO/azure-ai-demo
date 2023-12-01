@@ -215,8 +215,9 @@ module aiHub './modules/aiHub.bicep' = {
     applicationInsightsId: monitoring.outputs.applicationInsightsId
     containerRegistryId: containerRegistry.outputs.containerRegistryId
     openAiServiceName: openAiService.outputs.openAiServiceName
-    aiSpeechName: aiSpeech.outputs.aiSpeechName
     aiContentSafetyName: aiContentSafety.outputs.aiContentSafetyName
+    aiSpeechName: aiSpeech.outputs.aiSpeechName
+    aiSearchName: aiSearch.outputs.aiSearchName
     logAnalyticsWorkspaceId: monitoring.outputs.logAnalyticsWorkspaceId
     logAnalyticsWorkspaceName: logAnalyticsWorkspaceName
   }
