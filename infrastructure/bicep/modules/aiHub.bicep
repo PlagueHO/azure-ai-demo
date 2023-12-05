@@ -95,51 +95,51 @@ resource aiHubSpeechEndpoint 'Microsoft.MachineLearningServices/workspaces/endpo
   }
 }
 
-var openAiServicesTarget = 'https://${openAiService.location}.api.cognitive.microsoft.com'
-var aiContentSafetyTarget = 'https://${aiContentSafety.location}.api.cognitive.microsoft.com'
-var aiSearchTarget = 'https://${aiSearch.location}.api.cognitive.microsoft.com'
+// var openAiServicesTarget = 'https://${openAiService.location}.api.cognitive.microsoft.com'
+// var aiContentSafetyTarget = 'https://${aiContentSafety.location}.api.cognitive.microsoft.com'
+// var aiSearchTarget = 'https://${aiSearch.location}.api.cognitive.microsoft.com'
 
-resource aiHubConnectionOpenAi 'Microsoft.MachineLearningServices/workspaces/connections@2023-08-01-preview' = {
-  name: 'Default_AzureOpenAI'
-  parent: aiHub
-  properties: {
-    authType: 'ApiKey'
-    category: 'AzureOpenAI'
-    target: openAiServicesTarget
-    credentials: {
-      key: openAiService.listKeys().key1
-    }
-    isSharedToAll: true
-  }
-}
+// resource aiHubConnectionOpenAi 'Microsoft.MachineLearningServices/workspaces/connections@2023-08-01-preview' = {
+//   name: 'Default_AzureOpenAI'
+//   parent: aiHub
+//   properties: {
+//     authType: 'ApiKey'
+//     category: 'AzureOpenAI'
+//     target: openAiServicesTarget
+//     credentials: {
+//       key: openAiService.listKeys().key1
+//     }
+//     isSharedToAll: true
+//   }
+// }
 
-resource aiHubConnectionContentSafety 'Microsoft.MachineLearningServices/workspaces/connections@2023-08-01-preview' = {
-  name: 'Default_AzureAIContentSafety'
-  parent: aiHub
-  properties: {
-    authType: 'ApiKey'
-    category: 'CognitiveService'
-    target: aiContentSafetyTarget
-    credentials: {
-      key: aiContentSafety.listKeys().key1
-    }
-    isSharedToAll: true
-  }
-}
+// resource aiHubConnectionContentSafety 'Microsoft.MachineLearningServices/workspaces/connections@2023-08-01-preview' = {
+//   name: 'Default_AzureAIContentSafety'
+//   parent: aiHub
+//   properties: {
+//     authType: 'ApiKey'
+//     category: 'CognitiveService'
+//     target: aiContentSafetyTarget
+//     credentials: {
+//       key: aiContentSafety.listKeys().key1
+//     }
+//     isSharedToAll: true
+//   }
+// }
 
-resource aiHubConnectionAiSearch 'Microsoft.MachineLearningServices/workspaces/connections@2023-08-01-preview' = {
-  name: 'Default_AzureAISearch'
-  parent: aiHub
-  properties: {
-    authType: 'ApiKey'
-    category: 'CognitiveSearch'
-    target: aiSearchTarget
-    credentials: {
-      key: openAiService.listKeys().key1
-    }
-    isSharedToAll: true
-  }
-}
+// resource aiHubConnectionAiSearch 'Microsoft.MachineLearningServices/workspaces/connections@2023-08-01-preview' = {
+//   name: 'Default_AzureAISearch'
+//   parent: aiHub
+//   properties: {
+//     authType: 'ApiKey'
+//     category: 'CognitiveSearch'
+//     target: aiSearchTarget
+//     credentials: {
+//       key: openAiService.listKeys().key1
+//     }
+//     isSharedToAll: true
+//   }
+// }
 
 // Add the diagnostic settings to send logs and metrics to Log Analytics
 resource aiHubDiagnosticSetting 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
