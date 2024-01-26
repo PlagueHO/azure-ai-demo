@@ -31,7 +31,9 @@ resource aiSearch 'Microsoft.Search/searchServices@2022-09-01' existing = {
   name: aiSearchName
 }
 
-resource aiHub 'Microsoft.MachineLearningServices/workspaces@2023-08-01-preview' = {
+// TODO: Once APIs are published, should be able to remove this
+#disable-next-line BCP081
+resource aiHub 'Microsoft.MachineLearningServices/workspaces@2023-10-01' = {
   name: aiHubName
   location: location
   sku: {
@@ -58,21 +60,19 @@ resource aiHub 'Microsoft.MachineLearningServices/workspaces@2023-08-01-preview'
 
 // TODO: Once APIs are published, should be able to remove this
 #disable-next-line BCP081
-resource aiHubOpenAiEndpoint 'Microsoft.MachineLearningServices/workspaces/endpoints@2023-08-01-preview' = {
+resource aiHubOpenAiEndpoint 'Microsoft.MachineLearningServices/workspaces/endpoints@2023-10-01' = {
   name: 'Azure.OpenAI'
   parent: aiHub
   properties: {
     name: 'Azure.OpenAI'
     endpointType: 'Azure.OpenAI'
     associatedResourceId: openAiService.id
-    credential: 'APi'
-    key: 'apc'
   }
 }
 
 // TODO: Once APIs are published, should be able to remove this
 #disable-next-line BCP081
-resource aiHubContentSafetyEndpoint 'Microsoft.MachineLearningServices/workspaces/endpoints@2023-08-01-preview' = {
+resource aiHubContentSafetyEndpoint 'Microsoft.MachineLearningServices/workspaces/endpoints@2023-10-01' = {
   name: 'Azure.ContentSafety'
   parent: aiHub
   properties: {
@@ -84,7 +84,7 @@ resource aiHubContentSafetyEndpoint 'Microsoft.MachineLearningServices/workspace
 
 // TODO: Once APIs are published, should be able to remove this
 #disable-next-line BCP081
-resource aiHubSpeechEndpoint 'Microsoft.MachineLearningServices/workspaces/endpoints@2023-08-01-preview' = {
+resource aiHubSpeechEndpoint 'Microsoft.MachineLearningServices/workspaces/endpoints@2023-10-01' = {
   name: 'Azure.Speech'
   parent: aiHub
   properties: {
