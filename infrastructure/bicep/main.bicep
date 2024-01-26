@@ -42,14 +42,7 @@ var aiHubName = '${baseResourceName}-${locationCode}-aihub'
 
 var openAiModelDeployments = [
   {
-    name: 'gpt-35-turbo-16k'
-    modelName: 'gpt-35-turbo-16k'
-    version: '0613'
-    sku: 'Standard'
-    capacity: 60
-  }
-  {
-    name: 'gpt-35-turbo-1106'
+    name: 'gpt-35-turbo'
     modelName: 'gpt-35-turbo'
     version: '1106'
     sku: 'Standard'
@@ -60,7 +53,7 @@ var openAiModelDeployments = [
     modelName: 'gpt-4'
     version: '1106-Preview'
     sku: 'Standard'
-    capacity: 40
+    capacity: 60
   }
   {
     name: 'gpt-4-32k'
