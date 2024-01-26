@@ -89,7 +89,6 @@ resource aiHubSpeechEndpoint 'Microsoft.MachineLearningServices/workspaces/endpo
   parent: aiHub
   properties: {
     name: 'Azure.Speech'
-    location: location
     endpointType: 'Azure.Speech'
     associatedResourceId: aiSpeech.id
   }
